@@ -1,0 +1,2492 @@
+/* ==========================================================================
+   AURA — LIQUID GLASS UNIVERSAL CALCULATOR
+   Complete Responsive Calculator UI
+   ========================================================================== */
+
+/* ==========================================================================
+   ROOT
+   ========================================================================== */
+
+:root {
+    --bg-1: #020617;
+    --bg-2: #071126;
+    --bg-3: #0b1530;
+
+    --glass: rgba(15, 23, 42, 0.72);
+    --glass-strong: rgba(15, 23, 42, 0.88);
+    --glass-soft: rgba(255, 255, 255, 0.055);
+    --glass-hover: rgba(255, 255, 255, 0.10);
+
+    --border: rgba(255, 255, 255, 0.12);
+    --border-light: rgba(255, 255, 255, 0.18);
+    --border-strong: rgba(255, 255, 255, 0.26);
+
+    --text: #ffffff;
+    --text-2: rgba(255, 255, 255, 0.70);
+    --text-3: rgba(255, 255, 255, 0.42);
+
+    --blue: #4cc9f0;
+    --blue-2: #4361ee;
+    --purple: #7209b7;
+    --indigo: #6366f1;
+
+    --success: #4ade80;
+    --warning: #fbbf24;
+    --danger: #ff4d6d;
+
+    --accent-gradient:
+        linear-gradient(
+            135deg,
+            #4361ee 0%,
+            #4895ef 100%
+        );
+
+    --danger-gradient:
+        linear-gradient(
+            135deg,
+            #ff4d6d 0%,
+            #c9184a 100%
+        );
+
+    --font-main:
+        "Plus Jakarta Sans",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    --font-mono:
+        "JetBrains Mono",
+        "SFMono-Regular",
+        Consolas,
+        monospace;
+
+    --ease:
+        cubic-bezier(0.16, 1, 0.3, 1);
+
+    --spring:
+        cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --shadow:
+        0 28px 70px rgba(0, 0, 0, 0.48);
+
+    --soft-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ==========================================================================
+   RESET
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    min-height: 100%;
+    background: var(--bg-1);
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    width: 100%;
+    min-width: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 28px 16px;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(67, 97, 238, 0.08),
+            transparent 34%
+        ),
+        var(--bg-1);
+
+    color: var(--text);
+    font-family: var(--font-main);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    position: relative;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input {
+    outline: none;
+}
+
+img,
+svg,
+canvas,
+iframe {
+    max-width: 100%;
+}
+
+
+/* ==========================================================================
+   AMBIENT BACKGROUND
+   ========================================================================== */
+
+.ambient-background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(15, 23, 42, 0.85),
+            rgba(2, 6, 23, 0.98)
+        );
+
+    pointer-events: none;
+}
+
+.ambient-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+        );
+
+    background-size: 35px 35px;
+
+    mask-image:
+        radial-gradient(
+            circle at center,
+            black 0%,
+            transparent 85%
+        );
+
+    opacity: 0.28;
+}
+
+.liquid-blob {
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(95px);
+
+    opacity: 0.38;
+
+    will-change: transform;
+
+    animation:
+        auraFloat 20s ease-in-out infinite alternate;
+}
+
+.blob-primary {
+    width: 360px;
+    height: 360px;
+
+    top: -170px;
+    left: -130px;
+
+    background: #4361ee;
+}
+
+.blob-secondary {
+    width: 440px;
+    height: 440px;
+
+    right: -180px;
+    bottom: -190px;
+
+    background: #7209b7;
+
+    animation-delay: -7s;
+}
+
+.blob-tertiary {
+    width: 280px;
+    height: 280px;
+
+    top: 40%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    background: #4cc9f0;
+
+    animation-delay: -13s;
+}
+
+@keyframes auraFloat {
+    0% {
+        transform:
+            translate3d(0, 0, 0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate3d(35px, -25px, 0)
+            scale(1.07);
+    }
+
+    100% {
+        transform:
+            translate3d(-25px, 35px, 0)
+            scale(0.96);
+    }
+}
+
+
+/* ==========================================================================
+   APP VIEWPORT
+   ========================================================================== */
+
+.app-viewport {
+    position: relative;
+    z-index: 10;
+
+    width: 100%;
+
+    /*
+       IMPORTANT:
+       Keep this compact.
+       The previous 760px width made the calculator look like
+       a dashboard instead of an actual calculator.
+    */
+    max-width: 530px;
+
+    margin: 0 auto;
+
+    display: flex;
+    justify-content: center;
+
+    padding: 0;
+}
+
+
+/* ==========================================================================
+   CALCULATOR CHASSIS
+   ========================================================================== */
+
+.calculator-chassis {
+    position: relative;
+
+    width: 100%;
+    max-width: 530px;
+
+    padding: 18px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.13);
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.025)
+        ),
+        rgba(9, 15, 30, 0.78);
+
+    backdrop-filter:
+        blur(28px)
+        saturate(150%);
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(150%);
+
+    box-shadow:
+        0 35px 80px rgba(0, 0, 0, 0.50),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+
+    overflow: hidden;
+
+    isolation: isolate;
+
+    transform: translateZ(0);
+
+    animation:
+        chassisEnter 0.7s var(--ease) both;
+}
+
+.calculator-chassis::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: -2;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.13),
+            transparent 30%,
+            transparent 70%,
+            rgba(255, 255, 255, 0.035)
+        );
+
+    pointer-events: none;
+}
+
+.calculator-chassis::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 12%;
+    right: 12%;
+
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.42),
+            transparent
+        );
+
+    opacity: 0.5;
+
+    pointer-events: none;
+}
+
+@keyframes chassisEnter {
+    from {
+        opacity: 0;
+        transform:
+            translateY(18px)
+            scale(0.985);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.chassis-header {
+    position: relative;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+.brand-badge {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.brand-dot {
+    width: 8px;
+    height: 8px;
+
+    flex: 0 0 auto;
+
+    border-radius: 50%;
+
+    background: var(--blue);
+
+    box-shadow:
+        0 0 0 4px rgba(76, 201, 240, 0.08),
+        0 0 14px rgba(76, 201, 240, 0.85);
+
+    animation:
+        dotPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 4px rgba(76, 201, 240, 0.08),
+            0 0 12px rgba(76, 201, 240, 0.65);
+    }
+
+    50% {
+        box-shadow:
+            0 0 0 5px rgba(76, 201, 240, 0.04),
+            0 0 20px rgba(76, 201, 240, 0.95);
+    }
+}
+
+.brand-title {
+    min-width: 0;
+
+    white-space: nowrap;
+
+    color: #fff;
+
+    font-size: 0.88rem;
+    font-weight: 800;
+
+    letter-spacing: 1.25px;
+}
+
+.brand-title small {
+    color: var(--text-3);
+
+    font-size: 0.59rem;
+    font-weight: 600;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* ==========================================================================
+   MODE SELECTOR
+   ========================================================================== */
+
+.mode-selector {
+    min-width: 0;
+    max-width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 2px;
+
+    padding: 3px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+    background:
+        rgba(0, 0, 0, 0.28);
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+}
+
+.mode-selector::-webkit-scrollbar {
+    display: none;
+}
+
+.mode-btn {
+    flex: 0 0 auto;
+
+    border: none;
+    border-radius: 11px;
+
+    padding: 6px 9px;
+
+    color: var(--text-2);
+
+    background: transparent;
+
+    font-size: 0.66rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.24s var(--ease),
+        color 0.24s var(--ease),
+        transform 0.24s var(--spring);
+}
+
+.mode-btn:hover {
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.075);
+}
+
+.mode-btn:active {
+    transform: scale(0.95);
+}
+
+.mode-btn.active {
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.15);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ==========================================================================
+   HEADER ACTIONS
+   ========================================================================== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    flex: 0 0 auto;
+}
+
+.icon-action-btn {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.11);
+
+    border-radius: 50%;
+
+    color: var(--text-2);
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.28s var(--spring),
+        background 0.24s var(--ease),
+        color 0.24s var(--ease),
+        border-color 0.24s var(--ease),
+        box-shadow 0.24s var(--ease);
+}
+
+.icon-action-btn:hover {
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    border-color:
+        rgba(255, 255, 255, 0.23);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.25);
+
+    transform:
+        translateY(-1px)
+        scale(1.07);
+}
+
+.icon-action-btn:active {
+    transform: scale(0.91);
+}
+
+
+/* ==========================================================================
+   DISPLAY
+   ========================================================================== */
+
+.display-chassis {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 128px;
+
+    margin-bottom: 14px;
+
+    padding: 15px 18px 17px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    text-align: right;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.035),
+            rgba(0, 0, 0, 0.31)
+        ),
+        rgba(0, 0, 0, 0.27);
+
+    box-shadow:
+        inset 0 2px 14px rgba(0, 0, 0, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.045);
+
+    overflow: hidden;
+}
+
+.display-chassis::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 46%;
+    height: 1px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(76, 201, 240, 0.50),
+            transparent
+        );
+
+    opacity: 0.65;
+}
+
+.display-meta {
+    min-height: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 7px;
+
+    color: var(--text-3);
+
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+}
+
+.angle-mode-indicator {
+    letter-spacing: 0.8px;
+}
+
+.memory-indicator {
+    color: var(--blue);
+
+    font-family: var(--font-mono);
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+.expression-history {
+    min-height: 22px;
+
+    margin-bottom: 2px;
+
+    color: var(--text-2);
+
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+
+    line-height: 1.35;
+
+    white-space: nowrap;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+
+    word-break: normal;
+}
+
+.expression-history::-webkit-scrollbar {
+    display: none;
+}
+
+.primary-output {
+    min-height: 49px;
+
+    color: #fff;
+
+    font-family: var(--font-mono);
+    font-size: clamp(2rem, 7vw, 2.65rem);
+    font-weight: 700;
+
+    line-height: 1.05;
+
+    letter-spacing: -1.3px;
+
+    word-break: break-all;
+
+    transition:
+        color 0.25s ease,
+        font-size 0.25s ease,
+        transform 0.25s var(--ease);
+
+    transform-origin: right center;
+}
+
+.primary-output.error {
+    color: #ff6b81;
+}
+
+
+/* ==========================================================================
+   PANELS
+   ========================================================================== */
+
+.engine-panels {
+    position: relative;
+
+    width: 100%;
+
+    min-width: 0;
+}
+
+.panel-layout {
+    width: 100%;
+
+    display: none;
+
+    opacity: 0;
+    transform: translateY(8px);
+
+    min-width: 0;
+}
+
+.panel-layout.active {
+    display: block;
+
+    opacity: 1;
+    transform: translateY(0);
+
+    animation:
+        panelReveal 0.32s var(--ease) both;
+}
+
+@keyframes panelReveal {
+    from {
+        opacity: 0;
+        transform:
+            translateY(8px)
+            scale(0.995);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ==========================================================================
+   KEYPAD
+   ========================================================================== */
+
+.keypad-grid {
+    width: 100%;
+
+    display: grid;
+
+    gap: 8px;
+}
+
+.grid-4x5 {
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+}
+
+.grid-6x6 {
+    grid-template-columns:
+        repeat(6, minmax(0, 1fr));
+}
+
+
+/* ==========================================================================
+   CALCULATOR BUTTONS
+   ========================================================================== */
+
+.calc-btn {
+    position: relative;
+
+    min-width: 0;
+
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 5px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.105);
+
+    border-radius: 15px;
+
+    color: #fff;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.035)
+        );
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    font-family: var(--font-mono);
+    font-size: 1.08rem;
+    font-weight: 600;
+
+    cursor: pointer;
+    user-select: none;
+
+    overflow: hidden;
+
+    transform: translateZ(0);
+
+    transition:
+        transform 0.18s var(--spring),
+        background 0.20s var(--ease),
+        border-color 0.20s var(--ease),
+        box-shadow 0.20s var(--ease),
+        color 0.20s var(--ease);
+}
+
+.calc-btn::before {
+    content: "";
+
+    position: absolute;
+
+    top: -60%;
+    left: -80%;
+
+    width: 50%;
+    height: 220%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.13),
+            transparent
+        );
+
+    transform: rotate(20deg);
+
+    opacity: 0;
+
+    transition:
+        left 0.55s var(--ease),
+        opacity 0.25s ease;
+}
+
+.calc-btn:hover {
+    border-color:
+        rgba(255, 255, 255, 0.20);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.12),
+            rgba(255, 255, 255, 0.055)
+        );
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.23),
+        inset 0 1px 0 rgba(255, 255, 255, 0.09);
+
+    transform:
+        translateY(-2px)
+        scale(1.018);
+}
+
+.calc-btn:hover::before {
+    left: 135%;
+    opacity: 1;
+}
+
+.calc-btn:active {
+    transform:
+        translateY(1px)
+        scale(0.94);
+
+    box-shadow:
+        0 2px 7px rgba(0, 0, 0, 0.28),
+        inset 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.calc-btn:focus-visible {
+    border-color:
+        rgba(76, 201, 240, 0.65);
+
+    box-shadow:
+        0 0 0 3px rgba(76, 201, 240, 0.13),
+        0 6px 18px rgba(0, 0, 0, 0.20);
+}
+
+
+/* ==========================================================================
+   BUTTON TYPES
+   ========================================================================== */
+
+.key-num {
+    color: #fff;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.035)
+        );
+}
+
+.action-op {
+    color: var(--blue);
+
+    background:
+        rgba(255, 255, 255, 0.085);
+
+    font-weight: 700;
+}
+
+.action-func {
+    color: #b3bcff;
+
+    background:
+        rgba(99, 102, 241, 0.10);
+
+    font-family: var(--font-main);
+    font-size: 0.76rem;
+
+    font-weight: 700;
+}
+
+.action-danger {
+    border-color:
+        rgba(255, 77, 109, 0.20);
+
+    color: #fff;
+
+    background:
+        var(--danger-gradient);
+
+    font-weight: 800;
+
+    box-shadow:
+        0 7px 18px rgba(201, 24, 74, 0.22);
+}
+
+.action-danger:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #ff607d,
+            #d61c52
+        );
+
+    box-shadow:
+        0 10px 24px rgba(201, 24, 74, 0.30);
+}
+
+.action-accent {
+    border-color:
+        rgba(67, 97, 238, 0.35);
+
+    color: #fff;
+
+    background:
+        var(--accent-gradient);
+
+    font-weight: 800;
+
+    box-shadow:
+        0 8px 20px rgba(67, 97, 238, 0.30);
+}
+
+.action-accent:hover {
+    box-shadow:
+        0 12px 27px rgba(67, 97, 238, 0.40);
+}
+
+.col-span-2 {
+    grid-column: span 2;
+}
+
+
+/* ==========================================================================
+   MATRIX ENGINE
+   ========================================================================== */
+
+.matrix-chassis {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 11px;
+
+    min-width: 0;
+}
+
+.matrix-dimension-picker {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    color: var(--text-2);
+
+    font-size: 0.76rem;
+}
+
+.matrix-dimension-picker span {
+    color: var(--text-3);
+}
+
+.dim-btn {
+    border:
+        1px solid rgba(255, 255, 255, 0.10);
+
+    border-radius: 9px;
+
+    padding: 5px 10px;
+
+    color: var(--text-2);
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    font-size: 0.70rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        all 0.2s var(--ease);
+}
+
+.dim-btn:hover {
+    color: #fff;
+    background:
+        rgba(255, 255, 255, 0.10);
+}
+
+.dim-btn.active {
+    color: #fff;
+
+    border-color: var(--blue-2);
+
+    background:
+        var(--blue-2);
+
+    box-shadow:
+        0 5px 14px rgba(67, 97, 238, 0.25);
+}
+
+.matrices-wrapper {
+    width: 100%;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+.matrix-box {
+    flex: 1 1 0;
+
+    min-width: 0;
+
+    padding: 9px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+    background:
+        rgba(0, 0, 0, 0.22);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.matrix-label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--text-3);
+
+    font-size: 0.62rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.65px;
+}
+
+.matrix-grid {
+    display: grid;
+
+    gap: 5px;
+}
+
+.matrix-grid.dim-2 {
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+}
+
+.matrix-grid.dim-3 {
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+.matrix-cell {
+    width: 100%;
+    min-width: 0;
+
+    height: 34px;
+
+    padding: 3px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.11);
+
+    border-radius: 8px;
+
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    text-align: center;
+
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.matrix-cell:focus {
+    border-color:
+        rgba(67, 97, 238, 0.80);
+
+    background:
+        rgba(67, 97, 238, 0.10);
+
+    box-shadow:
+        0 0 0 2px rgba(67, 97, 238, 0.14);
+}
+
+.matrix-cell::placeholder {
+    color:
+        rgba(255, 255, 255, 0.18);
+}
+
+.matrix-operations {
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 5px;
+}
+
+.matrix-op-btn {
+    width: 31px;
+    height: 31px;
+
+    flex: 0 0 auto;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.11);
+
+    border-radius: 9px;
+
+    color: var(--blue);
+
+    background:
+        rgba(255, 255, 255, 0.065);
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s var(--spring),
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.matrix-op-btn:hover {
+    background:
+        rgba(255, 255, 255, 0.13);
+
+    box-shadow:
+        0 5px 12px rgba(0, 0, 0, 0.18);
+
+    transform: scale(1.06);
+}
+
+.matrix-op-btn:active {
+    transform: scale(0.92);
+}
+
+.matrix-single-ops {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 6px;
+}
+
+.matrix-spec-btn {
+    min-width: 0;
+
+    padding: 8px 4px;
+
+    border:
+        1px solid rgba(99, 102, 241, 0.18);
+
+    border-radius: 10px;
+
+    color: #b7c0ff;
+
+    background:
+        rgba(99, 102, 241, 0.09);
+
+    font-size: 0.66rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s var(--spring),
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.matrix-spec-btn:hover {
+    color: #fff;
+
+    border-color:
+        rgba(99, 102, 241, 0.40);
+
+    background:
+        rgba(99, 102, 241, 0.18);
+
+    transform: translateY(-1px);
+}
+
+.matrix-spec-btn:active {
+    transform: scale(0.96);
+}
+
+.matrix-result-container {
+    width: 100%;
+    min-width: 0;
+
+    padding: 10px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 14px;
+
+    background:
+        rgba(0, 0, 0, 0.25);
+
+    overflow-x: auto;
+}
+
+.matrix-output-grid {
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--blue);
+
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+
+    text-align: center;
+
+    white-space: pre-wrap;
+}
+
+
+/* ==========================================================================
+   COMMERCIAL ENGINE
+   ========================================================================== */
+
+.commercial-grid {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.comm-tabs {
+    display: flex;
+
+    gap: 5px;
+
+    max-width: 100%;
+
+    padding-bottom: 2px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: none;
+}
+
+.comm-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.comm-tab {
+    flex: 0 0 auto;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.10);
+
+    border-radius: 10px;
+
+    padding: 6px 10px;
+
+    color: var(--text-2);
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    font-size: 0.66rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s var(--spring),
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.comm-tab:hover {
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    transform: translateY(-1px);
+}
+
+.comm-tab.active {
+    color: #fff;
+
+    border-color:
+        rgba(67, 97, 238, 0.55);
+
+    background:
+        var(--blue-2);
+
+    box-shadow:
+        0 6px 15px rgba(67, 97, 238, 0.24);
+}
+
+.comm-form-container {
+    width: 100%;
+
+    padding: 13px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.075);
+
+    border-radius: 16px;
+
+    background:
+        rgba(0, 0, 0, 0.20);
+}
+
+.comm-form {
+    display: none;
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+.comm-form.active {
+    display: flex;
+
+    animation:
+        formReveal 0.28s var(--ease) both;
+}
+
+@keyframes formReveal {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.input-field {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.input-field label {
+    color: var(--text-3);
+
+    font-size: 0.63rem;
+    font-weight: 700;
+}
+
+.input-field input {
+    width: 100%;
+    min-width: 0;
+
+    height: 39px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.11);
+
+    border-radius: 10px;
+
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.055);
+
+    font-family: var(--font-mono);
+    font-size: 0.80rem;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.input-field input:focus {
+    border-color:
+        rgba(67, 97, 238, 0.75);
+
+    background:
+        rgba(67, 97, 238, 0.08);
+
+    box-shadow:
+        0 0 0 3px rgba(67, 97, 238, 0.11);
+}
+
+.input-field input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.18);
+}
+
+.comm-calc-btn {
+    width: 100%;
+
+    min-height: 40px;
+
+    margin-top: 2px;
+
+    padding: 9px 12px;
+
+    border: none;
+    border-radius: 11px;
+
+    color: #fff;
+
+    background:
+        var(--accent-gradient);
+
+    font-size: 0.76rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 7px 18px rgba(67, 97, 238, 0.22);
+
+    transition:
+        transform 0.2s var(--spring),
+        filter 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.comm-calc-btn:hover {
+    filter: brightness(1.08);
+
+    box-shadow:
+        0 10px 22px rgba(67, 97, 238, 0.32);
+
+    transform: translateY(-1px);
+}
+
+.comm-calc-btn:active {
+    transform: scale(0.97);
+}
+
+.comm-btn-group {
+    display: flex;
+
+    gap: 7px;
+}
+
+.comm-btn-group .comm-calc-btn {
+    flex: 1;
+}
+
+.comm-calc-btn.secondary {
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    box-shadow:
+        none;
+}
+
+.comm-result-card {
+    width: 100%;
+
+    margin-top: 2px;
+
+    padding: 12px;
+
+    border:
+        1px solid rgba(67, 97, 238, 0.22);
+
+    border-radius: 14px;
+
+    background:
+        rgba(67, 97, 238, 0.075);
+}
+
+.card-title {
+    color: #aeb7ff;
+
+    font-size: 0.60rem;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.result-breakdown {
+    margin-top: 5px;
+
+    color: #fff;
+
+    font-family: var(--font-mono);
+    font-size: 0.77rem;
+
+    line-height: 1.65;
+}
+
+.result-breakdown strong {
+    color: var(--blue);
+}
+
+
+/* ==========================================================================
+   HISTORY DRAWER
+   ========================================================================== */
+
+.history-drawer {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    width: 100%;
+    max-width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 18px;
+
+    border-radius: inherit;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 23, 42, 0.98),
+            rgba(3, 7, 18, 0.97)
+        );
+
+    backdrop-filter:
+        blur(28px)
+        saturate(145%);
+
+    -webkit-backdrop-filter:
+        blur(28px)
+        saturate(145%);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+    overflow: hidden;
+
+    transform:
+        translate3d(105%, 0, 0);
+
+    visibility: hidden;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    transition:
+        transform 0.45s var(--ease),
+        opacity 0.30s ease,
+        visibility 0s linear 0.45s;
+}
+
+.history-drawer.open {
+    transform:
+        translate3d(0, 0, 0);
+
+    visibility: visible;
+
+    pointer-events: auto;
+
+    opacity: 1;
+
+    transition:
+        transform 0.45s var(--ease),
+        opacity 0.30s ease,
+        visibility 0s linear 0s;
+}
+
+
+/* Drawer top */
+
+.drawer-header {
+    width: 100%;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 14px;
+
+    flex: 0 0 auto;
+}
+
+.drawer-header h3 {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #fff;
+
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.drawer-header h3 i {
+    color: var(--blue);
+}
+
+.drawer-close {
+    width: 33px;
+    height: 33px;
+
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 50%;
+
+    color: var(--text-2);
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    font-size: 0.85rem;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.23s var(--spring),
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.drawer-close:hover {
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.10);
+
+    transform:
+        rotate(90deg)
+        scale(1.06);
+}
+
+.drawer-close:active {
+    transform: scale(0.92);
+}
+
+
+/* History list */
+
+.history-list {
+    width: 100%;
+    min-width: 0;
+
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding-right: 2px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(255,255,255,0.15)
+        transparent;
+}
+
+.history-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background:
+        rgba(255,255,255,0.14);
+
+    border-radius: 99px;
+}
+
+.history-item {
+    width: 100%;
+    max-width: 100%;
+
+    flex: 0 0 auto;
+
+    padding: 10px 12px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.075);
+
+    border-radius: 12px;
+
+    color: #fff;
+
+    background:
+        rgba(255, 255, 255, 0.045);
+
+    text-align: right;
+
+    cursor: pointer;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.20s var(--spring),
+        background 0.20s ease,
+        border-color 0.20s ease;
+}
+
+.history-item:hover {
+    border-color:
+        rgba(76, 201, 240, 0.17);
+
+    background:
+        rgba(255, 255, 255, 0.075);
+
+    transform: translateX(-3px);
+}
+
+.history-item:active {
+    transform: scale(0.985);
+}
+
+.history-item .hist-expr {
+    width: 100%;
+
+    color: var(--text-3);
+
+    font-family: var(--font-mono);
+    font-size: 0.69rem;
+
+    white-space: normal;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.history-item .hist-res {
+    width: 100%;
+
+    margin-top: 3px;
+
+    color: var(--blue);
+
+    font-family: var(--font-mono);
+    font-size: 0.96rem;
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.history-empty {
+    width: 100%;
+
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    color: var(--text-3);
+
+    font-size: 0.78rem;
+
+    text-align: center;
+}
+
+
+/* Clear button */
+
+.clear-history-btn {
+    width: 100%;
+
+    flex: 0 0 auto;
+
+    min-height: 38px;
+
+    margin-top: 9px;
+
+    padding: 8px 10px;
+
+    border:
+        1px solid rgba(255, 77, 109, 0.22);
+
+    border-radius: 10px;
+
+    color: #ff6b81;
+
+    background:
+        rgba(255, 77, 109, 0.09);
+
+    font-size: 0.73rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s var(--spring),
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.clear-history-btn:hover {
+    border-color:
+        rgba(255, 77, 109, 0.40);
+
+    background:
+        rgba(255, 77, 109, 0.16);
+
+    transform: translateY(-1px);
+}
+
+.clear-history-btn:active {
+    transform: scale(0.97);
+}
+
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media (max-width: 760px) {
+    body {
+        align-items: flex-start;
+
+        padding:
+            16px 10px;
+    }
+
+    .app-viewport {
+        max-width: 520px;
+    }
+
+    .calculator-chassis {
+        border-radius: 27px;
+
+        padding: 16px;
+    }
+}
+
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 560px) {
+    body {
+        padding:
+            8px 6px;
+
+        background:
+            radial-gradient(
+                circle at 50% 0%,
+                rgba(67, 97, 238, 0.07),
+                transparent 42%
+            ),
+            var(--bg-1);
+    }
+
+    .app-viewport,
+    .calculator-chassis {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .calculator-chassis {
+        padding: 12px;
+
+        border-radius: 23px;
+    }
+
+    .chassis-header {
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            auto;
+
+        gap: 8px;
+
+        margin-bottom: 11px;
+    }
+
+    .brand-title {
+        font-size: 0.78rem;
+
+        letter-spacing: 1px;
+    }
+
+    .brand-title small {
+        font-size: 0.54rem;
+    }
+
+    .mode-selector {
+        grid-column: 1 / -1;
+
+        width: 100%;
+    }
+
+    .mode-btn {
+        padding:
+            5px 8px;
+
+        font-size: 0.60rem;
+    }
+
+    .header-actions {
+        gap: 5px;
+    }
+
+    .icon-action-btn {
+        width: 30px;
+        height: 30px;
+    }
+
+    .display-chassis {
+        min-height: 112px;
+
+        margin-bottom: 11px;
+
+        padding:
+            13px 14px 14px;
+
+        border-radius: 18px;
+    }
+
+    .display-meta {
+        font-size: 0.57rem;
+    }
+
+    .expression-history {
+        font-size: 0.70rem;
+    }
+
+    .primary-output {
+        font-size: 2.1rem;
+    }
+
+    .keypad-grid {
+        gap: 6px;
+    }
+
+    .calc-btn {
+        height: 49px;
+
+        border-radius: 13px;
+
+        font-size: 0.97rem;
+    }
+
+    .action-func {
+        font-size: 0.67rem;
+    }
+
+    .grid-6x6 .calc-btn {
+        height: 42px;
+
+        border-radius: 10px;
+
+        font-size: 0.68rem;
+    }
+
+    .matrix-chassis,
+    .commercial-grid {
+        gap: 8px;
+    }
+
+    .matrices-wrapper {
+        gap: 5px;
+    }
+
+    .matrix-box {
+        padding: 7px;
+    }
+
+    .matrix-cell {
+        height: 31px;
+
+        font-size: 0.69rem;
+    }
+
+    .matrix-op-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .matrix-spec-btn {
+        padding:
+            7px 3px;
+
+        font-size: 0.60rem;
+    }
+
+    .comm-form-container {
+        padding: 10px;
+    }
+
+    .input-field input {
+        height: 37px;
+
+        font-size: 0.76rem;
+    }
+
+    .history-drawer {
+        padding: 14px;
+
+        border-radius: 23px;
+    }
+}
+
+
+/* ==========================================================================
+   VERY SMALL PHONES
+   ========================================================================== */
+
+@media (max-width: 380px) {
+    body {
+        padding:
+            5px 4px;
+    }
+
+    .calculator-chassis {
+        padding: 10px;
+
+        border-radius: 20px;
+    }
+
+    .chassis-header {
+        gap: 6px;
+    }
+
+    .brand-title {
+        font-size: 0.72rem;
+    }
+
+    .mode-btn {
+        padding:
+            5px 7px;
+
+        font-size: 0.56rem;
+    }
+
+    .icon-action-btn {
+        width: 28px;
+        height: 28px;
+    }
+
+    .display-chassis {
+        min-height: 103px;
+
+        padding:
+            11px 12px 12px;
+
+        border-radius: 16px;
+    }
+
+    .primary-output {
+        font-size: 1.78rem;
+
+        letter-spacing: -1px;
+    }
+
+    .keypad-grid {
+        gap: 5px;
+    }
+
+    .calc-btn {
+        height: 45px;
+
+        border-radius: 11px;
+
+        font-size: 0.87rem;
+    }
+
+    .action-func {
+        font-size: 0.60rem;
+    }
+
+    .grid-6x6 .calc-btn {
+        height: 38px;
+
+        font-size: 0.60rem;
+
+        border-radius: 9px;
+    }
+
+    .matrix-cell {
+        height: 28px;
+
+        font-size: 0.63rem;
+    }
+
+    .matrix-op-btn {
+        width: 25px;
+        height: 25px;
+
+        font-size: 0.68rem;
+    }
+
+    .history-drawer {
+        padding: 12px;
+    }
+
+    .drawer-header {
+        margin-bottom: 10px;
+    }
+
+    .drawer-header h3 {
+        font-size: 0.88rem;
+    }
+
+    .history-item {
+        padding: 9px 10px;
+    }
+
+    .history-item .hist-expr {
+        font-size: 0.63rem;
+    }
+
+    .history-item .hist-res {
+        font-size: 0.86rem;
+    }
+}
+
+
+/* ==========================================================================
+   LANDSCAPE PHONES
+   ========================================================================== */
+
+@media (
+    max-height: 600px
+) and (
+    orientation: landscape
+) {
+    body {
+        align-items: flex-start;
+
+        padding:
+            8px;
+    }
+
+    .app-viewport {
+        max-width: 530px;
+    }
+
+    .calculator-chassis {
+        padding: 11px;
+
+        border-radius: 21px;
+    }
+
+    .chassis-header {
+        margin-bottom: 8px;
+    }
+
+    .display-chassis {
+        min-height: 90px;
+
+        margin-bottom: 8px;
+
+        padding:
+            10px 13px 11px;
+
+        border-radius: 16px;
+    }
+
+    .primary-output {
+        font-size: 1.8rem;
+    }
+
+    .keypad-grid {
+        gap: 5px;
+    }
+
+    .calc-btn {
+        height: 39px;
+    }
+
+    .grid-6x6 .calc-btn {
+        height: 32px;
+
+        font-size: 0.62rem;
+    }
+}
+
+
+/* ==========================================================================
+   TOUCH DEVICES
+   ========================================================================== */
+
+@media (hover: none) {
+    .calc-btn:hover {
+        transform: none;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255, 255, 255, 0.075),
+                rgba(255, 255, 255, 0.035)
+            );
+
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.16),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .icon-action-btn:hover,
+    .matrix-op-btn:hover,
+    .matrix-spec-btn:hover,
+    .comm-tab:hover,
+    .comm-calc-btn:hover,
+    .history-item:hover,
+    .clear-history-btn:hover {
+        transform: none;
+    }
+
+    .calc-btn:active {
+        transform:
+            scale(0.95);
+    }
+}
+
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+
+        transition-duration: 0.01ms !important;
+    }
+}
+
+
+/* ==========================================================================
+   GLOBAL OVERFLOW SAFETY
+   ========================================================================== */
+
+html,
+body,
+.app-viewport,
+.calculator-chassis,
+.engine-panels,
+.panel-layout {
+    max-width: 100%;
+}
+
+.app-viewport,
+.calculator-chassis,
+.engine-panels,
+.panel-layout,
+.display-chassis,
+.keypad-grid,
+.matrix-chassis,
+.commercial-grid,
+.history-drawer,
+.history-list {
+    min-width: 0;
+}
+
+
+/* ==========================================================================
+   FINAL VISUAL POLISH
+   ========================================================================== */
+
+::selection {
+    color: #fff;
+
+    background:
+        rgba(67, 97, 238, 0.40);
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        rgba(255, 255, 255, 0.20);
+}

@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#030712">
+
+    <title>AURA | Liquid Glass Universal Calculator</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================================================
+         AMBIENT BACKGROUND
+    ========================================================== -->
+
+    <div class="ambient-background">
+        <div class="liquid-blob blob-primary"></div>
+        <div class="liquid-blob blob-secondary"></div>
+        <div class="liquid-blob blob-tertiary"></div>
+        <div class="glass-mesh-overlay"></div>
+    </div>
+
+
+    <!-- =========================================================
+         MAIN APPLICATION
+    ========================================================== -->
+
+    <main class="app-viewport">
+
+        <div class="calculator-chassis">
+
+            <!-- =================================================
+                 HEADER
+            ================================================== -->
+
+            <header class="chassis-header">
+
+                <div class="brand-badge">
+                    <span class="brand-dot"></span>
+
+                    <span class="brand-title">
+                        AURA <small>v3.1</small>
+                    </span>
+                </div>
+
+
+                <nav class="mode-selector" aria-label="Calculator modes">
+
+                    <button
+                        class="mode-btn active"
+                        data-mode="standard"
+                        type="button"
+                    >
+                        Standard
+                    </button>
+
+                    <button
+                        class="mode-btn"
+                        data-mode="scientific"
+                        type="button"
+                    >
+                        Scientific
+                    </button>
+
+                    <button
+                        class="mode-btn"
+                        data-mode="matrix"
+                        type="button"
+                    >
+                        Matrix
+                    </button>
+
+                    <button
+                        class="mode-btn"
+                        data-mode="commercial"
+                        type="button"
+                    >
+                        Commercial
+                    </button>
+
+                </nav>
+
+
+                <div class="header-actions">
+
+                    <button
+                        class="icon-action-btn"
+                        id="history-toggle"
+                        title="Calculation History"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </button>
+
+                    <button
+                        class="icon-action-btn"
+                        id="theme-angle-btn"
+                        title="Shift Glass Angle"
+                        type="button"
+                    >
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 DISPLAY
+            ================================================== -->
+
+            <section class="display-chassis">
+
+                <div class="display-meta">
+
+                    <span
+                        class="angle-mode-indicator"
+                        id="angle-unit"
+                    >
+                        DEG
+                    </span>
+
+                    <span
+                        class="memory-indicator"
+                        id="memory-flag"
+                    ></span>
+
+                </div>
+
+                <div
+                    class="expression-history"
+                    id="expression-history"
+                ></div>
+
+                <div
+                    class="primary-output"
+                    id="primary-display"
+                    aria-live="polite"
+                >
+                    0
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CALCULATOR ENGINES
+            ================================================== -->
+
+            <section class="engine-panels">
+
+                <!-- =================================================
+                     STANDARD
+                ================================================== -->
+
+                <div
+                    class="panel-layout active"
+                    id="panel-standard"
+                >
+
+                    <div class="keypad-grid grid-4x5">
+
+                        <button
+                            class="calc-btn action-danger"
+                            data-action="clear"
+                            type="button"
+                        >
+                            AC
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="delete"
+                            type="button"
+                        >
+                            <i class="fa-solid fa-backspace"></i>
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="operator"
+                            data-val="%"
+                            type="button"
+                        >
+                            %
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="÷"
+                            type="button"
+                        >
+                            ÷
+                        </button>
+
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="7"
+                            type="button"
+                        >
+                            7
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="8"
+                            type="button"
+                        >
+                            8
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="9"
+                            type="button"
+                        >
+                            9
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="×"
+                            type="button"
+                        >
+                            ×
+                        </button>
+
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="4"
+                            type="button"
+                        >
+                            4
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="5"
+                            type="button"
+                        >
+                            5
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="6"
+                            type="button"
+                        >
+                            6
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="-"
+                            type="button"
+                        >
+                            -
+                        </button>
+
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="1"
+                            type="button"
+                        >
+                            1
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="2"
+                            type="button"
+                        >
+                            2
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="3"
+                            type="button"
+                        >
+                            3
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="+"
+                            type="button"
+                        >
+                            +
+                        </button>
+
+
+                        <button
+                            class="calc-btn key-num col-span-2"
+                            data-action="num"
+                            data-val="0"
+                            type="button"
+                        >
+                            0
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="."
+                            type="button"
+                        >
+                            .
+                        </button>
+
+                        <button
+                            class="calc-btn action-accent"
+                            data-action="calculate"
+                            type="button"
+                        >
+                            =
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SCIENTIFIC
+                ================================================== -->
+
+                <div
+                    class="panel-layout"
+                    id="panel-scientific"
+                >
+
+                    <div class="keypad-grid grid-6x6">
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="toggle-angle"
+                            id="deg-rad-btn"
+                            type="button"
+                        >
+                            RAD
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="sin("
+                            type="button"
+                        >
+                            sin
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="cos("
+                            type="button"
+                        >
+                            cos
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="tan("
+                            type="button"
+                        >
+                            tan
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="log("
+                            type="button"
+                        >
+                            log
+                        </button>
+
+                        <button
+                            class="calc-btn action-danger"
+                            data-action="clear"
+                            type="button"
+                        >
+                            AC
+                        </button>
+
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="delete"
+                            type="button"
+                        >
+                            <i class="fa-solid fa-backspace"></i>
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="ln("
+                            type="button"
+                        >
+                            ln
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="^"
+                            type="button"
+                        >
+                            xʸ
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="√("
+                            type="button"
+                        >
+                            √
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="operator"
+                            data-val="%"
+                            type="button"
+                        >
+                            %
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="÷"
+                            type="button"
+                        >
+                            ÷
+                        </button>
+
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="num"
+                            data-val="π"
+                            type="button"
+                        >
+                            π
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="7"
+                            type="button"
+                        >
+                            7
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="8"
+                            type="button"
+                        >
+                            8
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="9"
+                            type="button"
+                        >
+                            9
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="("
+                            type="button"
+                        >
+                            (
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="×"
+                            type="button"
+                        >
+                            ×
+                        </button>
+
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="num"
+                            data-val="e"
+                            type="button"
+                        >
+                            e
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="4"
+                            type="button"
+                        >
+                            4
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="5"
+                            type="button"
+                        >
+                            5
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="6"
+                            type="button"
+                        >
+                            6
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val=")"
+                            type="button"
+                        >
+                            )
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="-"
+                            type="button"
+                        >
+                            -
+                        </button>
+
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="!"
+                            type="button"
+                        >
+                            n!
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="1"
+                            type="button"
+                        >
+                            1
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="2"
+                            type="button"
+                        >
+                            2
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="3"
+                            type="button"
+                        >
+                            3
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="func"
+                            data-val="²"
+                            type="button"
+                        >
+                            x²
+                        </button>
+
+                        <button
+                            class="calc-btn action-op"
+                            data-action="operator"
+                            data-val="+"
+                            type="button"
+                        >
+                            +
+                        </button>
+
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="mem-add"
+                            type="button"
+                        >
+                            M+
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="0"
+                            type="button"
+                        >
+                            0
+                        </button>
+
+                        <button
+                            class="calc-btn key-num"
+                            data-action="num"
+                            data-val="."
+                            type="button"
+                        >
+                            .
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="mem-clear"
+                            type="button"
+                        >
+                            MC
+                        </button>
+
+                        <button
+                            class="calc-btn action-func"
+                            data-action="mem-read"
+                            type="button"
+                        >
+                            MR
+                        </button>
+
+                        <button
+                            class="calc-btn action-accent"
+                            data-action="calculate"
+                            type="button"
+                        >
+                            =
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     MATRIX
+                ================================================== -->
+
+                <div
+                    class="panel-layout"
+                    id="panel-matrix"
+                >
+
+                    <div class="matrix-chassis">
+
+                        <div class="matrix-dimension-picker">
+
+                            <label>Dimension:</label>
+
+                            <button
+                                class="dim-btn active"
+                                data-dim="2"
+                                type="button"
+                            >
+                                2 × 2
+                            </button>
+
+                            <button
+                                class="dim-btn"
+                                data-dim="3"
+                                type="button"
+                            >
+                                3 × 3
+                            </button>
+
+                        </div>
+
+
+                        <div class="matrices-wrapper">
+
+                            <div class="matrix-box">
+
+                                <span class="matrix-label">
+                                    Matrix A
+                                </span>
+
+                                <div
+                                    class="matrix-grid dim-2"
+                                    id="matrix-a"
+                                ></div>
+
+                            </div>
+
+
+                            <div class="matrix-operations">
+
+                                <button
+                                    class="matrix-op-btn"
+                                    data-mop="add"
+                                    type="button"
+                                >
+                                    +
+                                </button>
+
+                                <button
+                                    class="matrix-op-btn"
+                                    data-mop="subtract"
+                                    type="button"
+                                >
+                                    −
+                                </button>
+
+                                <button
+                                    class="matrix-op-btn"
+                                    data-mop="multiply"
+                                    type="button"
+                                >
+                                    ×
+                                </button>
+
+                            </div>
+
+
+                            <div class="matrix-box">
+
+                                <span class="matrix-label">
+                                    Matrix B
+                                </span>
+
+                                <div
+                                    class="matrix-grid dim-2"
+                                    id="matrix-b"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="matrix-single-ops">
+
+                            <button
+                                class="matrix-spec-btn"
+                                data-sop="detA"
+                                type="button"
+                            >
+                                Det(A)
+                            </button>
+
+                            <button
+                                class="matrix-spec-btn"
+                                data-sop="transA"
+                                type="button"
+                            >
+                                Trans(A)
+                            </button>
+
+                            <button
+                                class="matrix-spec-btn"
+                                data-sop="invA"
+                                type="button"
+                            >
+                                Inv(A)
+                            </button>
+
+                            <button
+                                class="matrix-spec-btn"
+                                data-sop="detB"
+                                type="button"
+                            >
+                                Det(B)
+                            </button>
+
+                        </div>
+
+
+                        <div class="matrix-result-container">
+
+                            <span class="matrix-label">
+                                Computed Output
+                            </span>
+
+                            <div
+                                class="matrix-output-grid"
+                                id="matrix-result"
+                            >
+                                Matrix result will appear here
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     COMMERCIAL
+                ================================================== -->
+
+                <div
+                    class="panel-layout"
+                    id="panel-commercial"
+                >
+
+                    <div class="commercial-grid">
+
+                        <div class="comm-tabs">
+
+                            <button
+                                class="comm-tab active"
+                                data-comm="interest"
+                                type="button"
+                            >
+                                Compound Interest
+                            </button>
+
+                            <button
+                                class="comm-tab"
+                                data-comm="emi"
+                                type="button"
+                            >
+                                Loan EMI
+                            </button>
+
+                            <button
+                                class="comm-tab"
+                                data-comm="tax"
+                                type="button"
+                            >
+                                GST / Tax
+                            </button>
+
+                            <button
+                                class="comm-tab"
+                                data-comm="margin"
+                                type="button"
+                            >
+                                Profit Margin
+                            </button>
+
+                        </div>
+
+
+                        <div class="comm-form-container">
+
+                            <!-- Compound Interest -->
+
+                            <div
+                                class="comm-form active"
+                                id="comm-interest"
+                            >
+
+                                <div class="input-field">
+
+                                    <label for="ci-principal">
+                                        Principal Amount
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="ci-principal"
+                                        placeholder="10000"
+                                        value="10000"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <div class="input-field">
+
+                                    <label for="ci-rate">
+                                        Annual Rate (%)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="ci-rate"
+                                        placeholder="7.5"
+                                        value="7.5"
+                                        step="0.1"
+                                    >
+
+                                </div>
+
+
+                                <div class="input-field">
+
+                                    <label for="ci-years">
+                                        Duration (Years)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="ci-years"
+                                        placeholder="5"
+                                        value="5"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    class="comm-calc-btn"
+                                    id="calc-ci-btn"
+                                    type="button"
+                                >
+                                    Calculate Compound Returns
+                                </button>
+
+                            </div>
+
+
+                            <!-- EMI -->
+
+                            <div
+                                class="comm-form"
+                                id="comm-emi"
+                            >
+
+                                <div class="input-field">
+
+                                    <label for="emi-amount">
+                                        Loan Amount
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="emi-amount"
+                                        placeholder="250000"
+                                        value="250000"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <div class="input-field">
+
+                                    <label for="emi-rate">
+                                        Interest Rate (% p.a.)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="emi-rate"
+                                        placeholder="8.5"
+                                        value="8.5"
+                                        step="0.1"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <div class="input-field">
+
+                                    <label for="emi-tenure">
+                                        Tenure (Months)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="emi-tenure"
+                                        placeholder="360"
+                                        value="360"
+                                        min="1"
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    class="comm-calc-btn"
+                                    id="calc-emi-btn"
+                                    type="button"
+                                >
+                                    Compute Monthly EMI
+                                </button>
+
+                            </div>
+
+
+                            <!-- GST -->
+
+                            <div
+                                class="comm-form"
+                                id="comm-tax"
+                            >
+
+                                <div class="input-field">
+
+                                    <label for="tax-amount">
+                                        Amount
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="tax-amount"
+                                        placeholder="1000"
+                                        value="1000"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <div class="input-field">
+
+                                    <label for="tax-rate">
+                                        GST / Tax Rate (%)
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="tax-rate"
+                                        placeholder="18"
+                                        value="18"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <div class="comm-btn-group">
+
+                                    <button
+                                        class="comm-calc-btn"
+                                        id="calc-tax-add"
+                                        type="button"
+                                    >
+                                        Add Tax
+                                    </button>
+
+                                    <button
+                                        class="comm-calc-btn secondary"
+                                        id="calc-tax-sub"
+                                        type="button"
+                                    >
+                                        Remove Tax
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- Profit Margin -->
+
+                            <div
+                                class="comm-form"
+                                id="comm-margin"
+                            >
+
+                                <div class="input-field">
+
+                                    <label for="margin-cost">
+                                        Cost Price
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="margin-cost"
+                                        placeholder="80"
+                                        value="80"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <div class="input-field">
+
+                                    <label for="margin-sell">
+                                        Selling Price
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="margin-sell"
+                                        placeholder="120"
+                                        value="120"
+                                        min="0"
+                                    >
+
+                                </div>
+
+
+                                <button
+                                    class="comm-calc-btn"
+                                    id="calc-margin-btn"
+                                    type="button"
+                                >
+                                    Calculate Profit & Margin
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="comm-result-card"
+                            id="comm-output-card"
+                        >
+
+                            <span class="card-title">
+                                Commercial Analytics
+                            </span>
+
+                            <div
+                                class="result-breakdown"
+                                id="comm-result-text"
+                            >
+                                Select parameters above and trigger computation.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- =====================================================
+             HISTORY DRAWER
+        ====================================================== -->
+
+        <aside
+            class="history-drawer"
+            id="history-drawer"
+            aria-hidden="true"
+        >
+
+            <div class="drawer-header">
+
+                <h3>
+                    <i class="fa-solid fa-clock"></i>
+                    History
+                </h3>
+
+                <button
+                    class="drawer-close"
+                    id="history-close"
+                    type="button"
+                    title="Close History"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+
+            <div
+                class="history-list"
+                id="history-list"
+            >
+
+                <div class="history-empty">
+                    No calculations recorded yet
+                </div>
+
+            </div>
+
+
+            <button
+                class="clear-history-btn"
+                id="clear-history"
+                type="button"
+            >
+                Clear History
+            </button>
+
+        </aside>
+
+    </main>
+
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>
